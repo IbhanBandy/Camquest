@@ -122,8 +122,8 @@ export default function RentalModal({ isOpen, camera, onClose }: RentalModalProp
   
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto p-4 sm:p-6">
+        <DialogHeader className="mb-4">
           <DialogTitle className="text-lg font-medium">Rent Camera</DialogTitle>
           <Button
             variant="ghost"
@@ -139,15 +139,15 @@ export default function RentalModal({ isOpen, camera, onClose }: RentalModalProp
           </div>
         </DialogHeader>
         
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="overflow-y-auto">
           <div className="mb-4">
             <div className="flex items-center mb-4">
               <img 
                 src={camera.imageUrl} 
                 alt={camera.name} 
-                className="w-16 h-16 object-cover rounded" 
+                className="w-14 h-14 sm:w-16 sm:h-16 object-cover rounded flex-shrink-0" 
               />
-              <div className="ml-4">
+              <div className="ml-3 sm:ml-4">
                 <h4 className="font-medium text-gray-900">{camera.name}</h4>
                 <p className="text-sm text-gray-500">${camera.pricePerDay}/day</p>
               </div>
@@ -162,6 +162,7 @@ export default function RentalModal({ isOpen, camera, onClose }: RentalModalProp
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
                   min={today.toISOString().split('T')[0]}
+                  className="w-full touch-manipulation" 
                   required
                 />
               </div>
@@ -174,6 +175,7 @@ export default function RentalModal({ isOpen, camera, onClose }: RentalModalProp
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
                   min={startDate}
+                  className="w-full touch-manipulation"
                   required
                 />
               </div>
@@ -252,18 +254,20 @@ export default function RentalModal({ isOpen, camera, onClose }: RentalModalProp
             </div>
           </div>
           
-          <div className="mt-6 flex justify-end space-x-3">
+          <div className="mt-6 flex flex-col sm:flex-row justify-end gap-3 mb-4 sm:mb-0">
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
               disabled={rentalMutation.isPending}
+              className="w-full sm:w-auto"
             >
               Cancel
             </Button>
             <Button 
               type="submit" 
               disabled={rentalMutation.isPending}
+              className="w-full sm:w-auto"
             >
               {rentalMutation.isPending ? "Submitting..." : "Submit Request"}
             </Button>
