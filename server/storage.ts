@@ -34,38 +34,22 @@ export class MemStorage implements IStorage {
     this.cameraIdCounter = 1;
     this.rentalIdCounter = 1;
     
-    // Initial sample data
+    // Just one camera with limited stock
     this.createCamera({
-      name: "Veo Sports Camera",
-      description: "Perfect for capturing sports events and action shots",
+      name: "Veo Cam Three",
+      description: "Premium sports camera with cutting-edge tracking technology and AI-powered automated recording",
       category: "Sports Camera",
-      pricePerDay: 35,
-      totalUnits: 8,
-      availableUnits: 5,
-      specifications: ["4K Video Recording", "8-hour Battery Life", "High-speed Capture (120fps)"],
+      pricePerDay: 99,
+      totalUnits: 1,
+      availableUnits: 1,
+      specifications: [
+        "AI-powered automatic tracking", 
+        "4K Video at 60fps", 
+        "180° field of view",
+        "10-hour Battery Life", 
+        "Weatherproof design"
+      ],
       imageUrl: "https://images.unsplash.com/photo-1593080358201-08e4ff5f93d9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-    });
-    
-    this.createCamera({
-      name: "Advanced Veo Sports Camera",
-      description: "Professional-grade sports camera with advanced features",
-      category: "Sports Camera",
-      pricePerDay: 45,
-      totalUnits: 5,
-      availableUnits: 2,
-      specifications: ["5K Video Recording", "10-hour Battery Life", "Ultra High-speed (240fps)"],
-      imageUrl: "https://images.unsplash.com/photo-1516724562728-afc824a36e84?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-    });
-    
-    this.createCamera({
-      name: "Veo Pro Sports Camera",
-      description: "Top-of-the-line sports camera for professional use",
-      category: "Sports Camera",
-      pricePerDay: 60,
-      totalUnits: 3,
-      availableUnits: 0,
-      specifications: ["6K Video Recording", "12-hour Battery Life", "Professional Grade (360fps)"],
-      imageUrl: "https://images.unsplash.com/photo-1613291261423-0e0097215311?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
     });
   }
 
@@ -113,10 +97,14 @@ export class MemStorage implements IStorage {
     // Generate a request ID with format RNT-XXXXX
     const requestId = `RNT-${String(10000 + id).substring(1)}`;
     
+    // Ensure status is always a string (default to 'pending' if not provided)
+    const status = rentalRequest.status || 'pending';
+    
     const newRentalRequest: RentalRequest = { 
       ...rentalRequest, 
       id,
-      createdAt: new Date(),
+      status, // Use the properly defaulted status
+      createdAt: new Date()
     };
     
     this.rentalRequests.set(id, newRentalRequest);
