@@ -99,26 +99,14 @@ export default function RentalRequestsTab() {
           </Select>
         </div>
         
-        <div className="bg-amber-50 border-l-4 border-amber-500 p-4 rounded mb-4">
+        <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded mb-4">
           <div className="flex">
             <div className="flex-shrink-0">
-              <AlertCircle className="h-5 w-5 text-amber-400" aria-hidden="true" />
+              <CheckCircle className="h-5 w-5 text-green-400" aria-hidden="true" />
             </div>
             <div className="ml-3">
-              <p className="text-sm text-amber-700">
-                <strong>Email Notifications:</strong> Currently, email notifications are not being sent due to SendGrid sender verification requirements. New rental requests are still saved in the system and displayed here. Check the server console logs for detailed information about incoming requests.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
-          <div className="flex">
-            <div className="flex-shrink-0">
-              <AlertCircle className="h-5 w-5 text-blue-400" aria-hidden="true" />
-            </div>
-            <div className="ml-3">
-              <p className="text-sm text-blue-700">
-                <strong>To enable email notifications:</strong> Visit your SendGrid account, go to "Settings {'>'} Sender Authentication" and verify your email address (kaleb.gill420@gmail.com).
+              <p className="text-sm text-green-700">
+                <strong>Email Notifications:</strong> Rental request notifications will be sent directly to your Gmail inbox (kaleb.gill420@gmail.com) using your Gmail account. All requests are also saved in the system and displayed here.
               </p>
             </div>
           </div>

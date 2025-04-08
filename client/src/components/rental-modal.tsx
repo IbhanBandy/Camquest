@@ -70,7 +70,7 @@ export default function RentalModal({ isOpen, camera, onClose }: RentalModalProp
       queryClient.invalidateQueries({ queryKey: ['/api/cameras'] });
       toast({
         title: "Rental request submitted successfully!",
-        description: "Your request has been saved in the system. The admin will review it soon.",
+        description: "Your request has been saved and an email notification has been sent to the administrator.",
         variant: "default",
       });
       onClose();
@@ -135,7 +135,7 @@ export default function RentalModal({ isOpen, camera, onClose }: RentalModalProp
             <span className="sr-only">Close</span>
           </Button>
           <div className="text-sm text-gray-500 mt-2">
-            Fill out this form to submit your rental request. All requests are stored in the system and visible in the admin panel.
+            Fill out this form to submit your rental request. All requests are stored in the system and an email notification will be sent to the administrator.
           </div>
         </DialogHeader>
         

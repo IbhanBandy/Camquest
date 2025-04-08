@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertCameraSchema, insertRentalRequestSchema } from "@shared/schema";
 import { fromZodError } from "zod-validation-error";
-import { sendRentalRequestNotification } from "./email";
+import { sendRentalRequestNotification } from "./gmail";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
