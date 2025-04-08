@@ -53,7 +53,7 @@ export default function RentalRequestsTab() {
   };
   
   const getCameraName = (cameraId: number) => {
-    const camera = cameras.find(c => c.id === cameraId);
+    const camera = (cameras as Camera[]).find((c: Camera) => c.id === cameraId);
     return camera ? camera.name : 'Unknown Camera';
   };
   
@@ -73,8 +73,8 @@ export default function RentalRequestsTab() {
   };
   
   const filteredRentals = statusFilter === 'all' 
-    ? rentals 
-    : rentals.filter(rental => rental.status === statusFilter);
+    ? (rentals as RentalRequest[])
+    : (rentals as RentalRequest[]).filter((rental: RentalRequest) => rental.status === statusFilter);
   
   if (isLoadingRentals || isLoadingCameras) {
     return <div className="text-center py-8">Loading rental requests...</div>;
@@ -118,7 +118,7 @@ export default function RentalRequestsTab() {
             </div>
             <div className="ml-3">
               <p className="text-sm text-blue-700">
-                <strong>To enable email notifications:</strong> Visit your SendGrid account, go to "Settings > Sender Authentication" and verify your email address (kaleb.gill420@gmail.com).
+                <strong>To enable email notifications:</strong> Visit your SendGrid account, go to "Settings {'>'} Sender Authentication" and verify your email address (kaleb.gill420@gmail.com).
               </p>
             </div>
           </div>
@@ -150,7 +150,7 @@ export default function RentalRequestsTab() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {filteredRentals.map((rental) => (
+            {filteredRentals.map((rental: RentalRequest) => (
               <tr key={rental.id}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   RNT-{String(10000 + rental.id).substring(1)}
