@@ -155,14 +155,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Send email notification to admin
       try {
+        console.log('Attempting to send email notifications...');
+        
+        // Verify Gmail password is set
+        if (!process.env.GMAIL_APP_PASSWORD) {
+          console.error('ERROR: GMAIL_APP_PASSWORD environment variable is not set!');
+          console.error('Email functionality will not work without a valid app password.');
+        } else {
+          console.log('Gmail app password is set. Proceeding with email sending...');
+        }
+        
         const emailSent = await sendRentalRequestNotification(rental, camera);
         if (emailSent) {
-          console.log(`Email notification sent to admin for rental request #${rental.id}`);
+          console.log(`✅ Email notifications sent successfully for rental request #${rental.id}`);
         } else {
-          console.warn(`Failed to send email notification for rental request #${rental.id}`);
+          console.warn(`⚠️ Failed to send email notifications for rental request #${rental.id}`);
         }
       } catch (emailError) {
-        console.error('Error in email notification process:', emailError);
+        console.error('❌ Error in email notification process:', emailError);
+        // Try to provide more detailed error information
+        if (emailError instanceof Error) {
+          console.error(`Error name: ${emailError.name}`);
+          console.error(`Error message: ${emailError.message}`);
+          console.error(`Error stack: ${emailError.stack}`);
+        }
         // Don't fail the request if email sending fails
       }
       

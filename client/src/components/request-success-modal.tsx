@@ -40,32 +40,12 @@ export default function RequestSuccessModal({ isOpen, onClose, customerEmail }: 
               <p className="font-medium text-blue-900 bg-white/80 rounded-md py-2 px-3 text-center mb-3 border border-blue-100">
                 {customerEmail}
               </p>
-              <p className="text-xs text-blue-600">
-                You will receive follow-up communications from <strong>kaleb.gill420@gmail.com</strong>. 
-                Please ensure this email address is added to your contacts to prevent messages from being filtered as spam.
-              </p>
-            </div>
-            
-            {/* What happens next section */}
-            <div className="bg-gray-50 rounded-lg p-5 text-left border border-gray-100">
-              <h3 className="font-medium text-gray-800 mb-3 flex items-center">
-                <Clock className="h-4 w-4 mr-2 text-blue-500" /> 
-                What happens next?
-              </h3>
-              <ul className="text-sm space-y-3">
-                <li className="flex items-start">
-                  <span className="inline-flex items-center justify-center rounded-full bg-blue-100 h-5 w-5 text-xs text-blue-600 font-medium mr-2 mt-0.5">1</span>
-                  <span>Our team will review your rental request within 24 hours.</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="inline-flex items-center justify-center rounded-full bg-blue-100 h-5 w-5 text-xs text-blue-600 font-medium mr-2 mt-0.5">2</span>
-                  <span>You'll receive an email confirmation once your request is approved.</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="inline-flex items-center justify-center rounded-full bg-blue-100 h-5 w-5 text-xs text-blue-600 font-medium mr-2 mt-0.5">3</span>
-                  <span>We'll contact you with instructions for pickup or delivery.</span>
-                </li>
-              </ul>
+              <div className="bg-blue-100 p-3 rounded border border-blue-200">
+                <p className="text-blue-800 font-medium text-sm">
+                  You will receive follow-up communications from <strong>kaleb.gill420@gmail.com</strong>. 
+                  Please ensure this email address is added to your contacts to prevent messages from being filtered as spam.
+                </p>
+              </div>
             </div>
           </div>
           

@@ -5,12 +5,28 @@ import { format } from 'date-fns';
 // Admin email address to send notifications to
 const ADMIN_EMAIL = 'kaleb.gill420@gmail.com';
 
+// Check if Gmail app password is set
+if (!process.env.GMAIL_APP_PASSWORD) {
+  console.error('WARNING: GMAIL_APP_PASSWORD environment variable is not set. Email functionality will not work.');
+}
+
 // Create a nodemailer transporter using Gmail
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: ADMIN_EMAIL,
     pass: process.env.GMAIL_APP_PASSWORD
+  },
+  debug: true, // Enable debug logs
+  logger: true  // Log to console
+});
+
+// Verify connection configuration
+transporter.verify((error, success) => {
+  if (error) {
+    console.error('SMTP connection error:', error);
+  } else {
+    console.log('Email server connection established successfully');
   }
 });
 
@@ -170,9 +186,15 @@ export async function sendCustomerConfirmationEmail(rental: RentalRequest, camer
     };
     
     // Send the email
-    await transporter.sendMail(mailOptions);
-    console.log(`Confirmation email sent to customer: ${rental.customerEmail}`);
-    return true;
+    try {
+      const info = await transporter.sendMail(mailOptions);
+      console.log(`Confirmation email sent to customer: ${rental.customerEmail}`);
+      console.log(`Email Message ID: ${info.messageId}`);
+      return true;
+    } catch (emailError) {
+      console.error('Failed to send customer confirmation email:', emailError);
+      throw emailError; // Re-throw to be caught by the outer try/catch
+    }
   } catch (error) {
     console.error('Failed to send customer confirmation email:', error);
     // Print detailed error information for debugging
@@ -267,13 +289,19 @@ export async function sendRentalRequestNotification(rental: RentalRequest, camer
     };
     
     // Send the email
-    await transporter.sendMail(mailOptions);
-    console.log(`Email notification sent to admin: ${ADMIN_EMAIL}`);
-    
-    // Also send a confirmation email to the customer
-    await sendCustomerConfirmationEmail(rental, camera);
-    
-    return true;
+    try {
+      const info = await transporter.sendMail(mailOptions);
+      console.log(`Email notification sent to admin: ${ADMIN_EMAIL}`);
+      console.log(`Admin email Message ID: ${info.messageId}`);
+      
+      // Also send a confirmation email to the customer
+      await sendCustomerConfirmationEmail(rental, camera);
+      
+      return true;
+    } catch (emailError) {
+      console.error('Failed to send admin notification email:', emailError);
+      throw emailError; // Re-throw to be caught by the outer try/catch
+    }
   } catch (error) {
     console.error('Failed to send email notification:', error);
     // Print more detailed error information for debugging
