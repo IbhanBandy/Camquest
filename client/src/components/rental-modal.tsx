@@ -4,6 +4,7 @@ import { useToast } from '@/hooks/use-toast';
 import { queryClient } from '@/lib/queryClient';
 import { createRentalRequest } from '@/lib/api';
 import { useMutation } from '@tanstack/react-query';
+import { useAuth } from '@/lib/AuthContext';
 import { X } from 'lucide-react';
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -21,6 +22,7 @@ interface RentalModalProps {
 
 export default function RentalModal({ isOpen, camera, onClose }: RentalModalProps) {
   const { toast } = useToast();
+  const { user } = useAuth();
   const today = new Date();
   const tomorrow = addDays(today, 1);
   
@@ -43,11 +45,21 @@ export default function RentalModal({ isOpen, camera, onClose }: RentalModalProp
       setStartDate(today.toISOString().split('T')[0]);
       setEndDate(tomorrow.toISOString().split('T')[0]);
       setQuantity(1);
-      setCustomerName('');
-      setCustomerEmail('');
-      setCustomerPhone('');
+      
+      // Auto-fill user information if logged in
+      if (user) {
+        setCustomerName(user.displayName || '');
+        setCustomerEmail(user.email || '');
+        // Phone number is not available from Google auth, so leave it blank
+        setCustomerPhone('');
+      } else {
+        // Reset fields if not logged in
+        setCustomerName('');
+        setCustomerEmail('');
+        setCustomerPhone('');
+      }
     }
-  }, [isOpen, camera]);
+  }, [isOpen, camera, user]);
   
   // Generate quantity options based on available units
   const quantityOptions = camera ? Array.from({ length: camera.availableUnits }, (_, i) => i + 1) : [];

@@ -18,7 +18,7 @@ const googleProvider = new GoogleAuthProvider();
 // The admin email that has access to the admin panel
 // This is the email address associated with your Google account
 // that you'll use to sign in
-const ADMIN_EMAIL = 'admin@example.com'; // Replace with your Google email
+const ADMIN_EMAIL = 'kalebbgill@gmail.com'; // Kaleb Gill's email for admin access
 
 // Sign in with Google
 export const signInWithGoogle = async () => {

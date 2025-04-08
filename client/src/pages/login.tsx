@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { signInWithGoogle } from '@/lib/firebase';
 import { useAuth } from '@/lib/AuthContext';
@@ -38,11 +38,12 @@ export default function Login() {
   const { user } = useAuth();
   const [, setLocation] = useLocation();
 
-  // If already logged in, redirect to admin panel
-  if (user) {
-    setLocation('/admin');
-    return null;
-  }
+  // Use useEffect for redirection to avoid setState during render
+  useEffect(() => {
+    if (user) {
+      setLocation('/admin');
+    }
+  }, [user, setLocation]);
 
   const handleGoogleSignIn = async () => {
     setLoading(true);
