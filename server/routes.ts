@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertCameraSchema, insertRentalRequestSchema } from "@shared/schema";
 import { fromZodError } from "zod-validation-error";
+import { sendRentalRequestNotification } from "./email";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
@@ -151,6 +152,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log(`Total Price: $${rental.totalPrice.toFixed(2)}`);
       console.log(`Status: ${rental.status}`);
       console.log('--------------------------------\n');
+      
+      // Send email notification to admin
+      try {
+        await sendRentalRequestNotification(rental, camera);
+        console.log(`Email notification sent to admin for rental request #${rental.id}`);
+      } catch (emailError) {
+        console.error('Failed to send email notification:', emailError);
+        // Don't fail the request if email sending fails
+      }
       
       res.status(201).json(rental);
     } catch (error) {
