@@ -37,10 +37,17 @@ export const rentalRequests = pgTable("rental_requests", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const insertRentalRequestSchema = createInsertSchema(rentalRequests).omit({
-  id: true,
-  createdAt: true,
-});
+// Create a custom schema with proper date handling
+export const insertRentalRequestSchema = createInsertSchema(rentalRequests)
+  .omit({
+    id: true,
+    createdAt: true,
+  })
+  .extend({
+    // Ensure dates are properly validated
+    startDate: z.coerce.date(),
+    endDate: z.coerce.date(),
+  });
 
 export type InsertRentalRequest = z.infer<typeof insertRentalRequestSchema>;
 export type RentalRequest = typeof rentalRequests.$inferSelect;

@@ -89,13 +89,27 @@ export default function RentalModal({ isOpen, camera, onClose }: RentalModalProp
     
     if (!camera) return;
     
+    // Format dates properly to avoid validation errors
+    const formattedStartDate = new Date(startDate);
+    const formattedEndDate = new Date(endDate);
+    
+    // Ensure the dates are valid before submission
+    if (isNaN(formattedStartDate.getTime()) || isNaN(formattedEndDate.getTime())) {
+      toast({
+        title: "Invalid Dates",
+        description: "Please select valid start and end dates",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     const rentalRequest: InsertRentalRequest = {
       cameraId: camera.id,
       customerName,
       customerEmail,
       customerPhone,
-      startDate: new Date(startDate),
-      endDate: new Date(endDate),
+      startDate: formattedStartDate,
+      endDate: formattedEndDate,
       quantity,
       totalPrice,
       status: 'pending'
