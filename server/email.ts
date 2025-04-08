@@ -98,7 +98,7 @@ export async function sendRentalRequestNotification(rental: RentalRequest, camer
     // Send the email
     await mailService.send({
       to: ADMIN_EMAIL,
-      from: 'noreply@camquest.replit.app', // Must be verified in SendGrid
+      from: ADMIN_EMAIL, // Using the admin email as sender (must be verified in SendGrid)
       subject: emailSubject,
       text: textContent,
       html: htmlContent,
@@ -108,6 +108,15 @@ export async function sendRentalRequestNotification(rental: RentalRequest, camer
     return true;
   } catch (error) {
     console.error('Failed to send email notification:', error);
+    // Print more detailed error information for debugging
+    try {
+      const errorObj = error as any;
+      if (errorObj?.response?.body) {
+        console.error('SendGrid error details:', JSON.stringify(errorObj.response.body, null, 2));
+      }
+    } catch (e) {
+      console.error('Could not parse error details');
+    }
     return false;
   }
 }

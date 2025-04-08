@@ -155,10 +155,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Send email notification to admin
       try {
-        await sendRentalRequestNotification(rental, camera);
-        console.log(`Email notification sent to admin for rental request #${rental.id}`);
+        const emailSent = await sendRentalRequestNotification(rental, camera);
+        if (emailSent) {
+          console.log(`Email notification sent to admin for rental request #${rental.id}`);
+        } else {
+          console.warn(`Failed to send email notification for rental request #${rental.id}`);
+        }
       } catch (emailError) {
-        console.error('Failed to send email notification:', emailError);
+        console.error('Error in email notification process:', emailError);
         // Don't fail the request if email sending fails
       }
       
