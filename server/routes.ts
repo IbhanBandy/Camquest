@@ -137,6 +137,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const rental = await storage.createRentalRequest(result.data);
+      
+      // Log the rental request details for the admin
+      console.log('\n--------------------------------');
+      console.log('NEW RENTAL REQUEST RECEIVED:');
+      console.log('--------------------------------');
+      console.log(`Camera ID: ${rental.cameraId}`);
+      console.log(`Customer: ${rental.customerName}`);
+      console.log(`Email: ${rental.customerEmail}`);
+      console.log(`Phone: ${rental.customerPhone}`);
+      console.log(`Dates: ${rental.startDate.toISOString().split('T')[0]} to ${rental.endDate.toISOString().split('T')[0]}`);
+      console.log(`Quantity: ${rental.quantity}`);
+      console.log(`Total Price: $${rental.totalPrice.toFixed(2)}`);
+      console.log(`Status: ${rental.status}`);
+      console.log('--------------------------------\n');
+      
       res.status(201).json(rental);
     } catch (error) {
       res.status(500).json({ message: "Failed to create rental request" });

@@ -82,8 +82,8 @@ export default function RentalRequestsTab() {
   
   return (
     <div>
-      <div className="mb-4">
-        <div className="flex justify-between items-center">
+      <div className="mb-6">
+        <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-medium text-gray-900">Rental Requests</h3>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
             <SelectTrigger className="w-[180px]">
@@ -97,6 +97,19 @@ export default function RentalRequestsTab() {
               <SelectItem value="cancelled">Cancelled</SelectItem>
             </SelectContent>
           </Select>
+        </div>
+        
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <AlertCircle className="h-5 w-5 text-blue-400" aria-hidden="true" />
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-blue-700">
+                <strong>Email Notifications Active:</strong> New rental requests will be displayed here and detailed notifications will appear in your server console logs. Keep the console open to see incoming requests.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
       
