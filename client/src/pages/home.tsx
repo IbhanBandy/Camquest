@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { getCameras } from '@/lib/api';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { getCameras, deleteCamera, updateCamera } from '@/lib/api';
 import { Camera } from '@shared/schema';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
@@ -9,27 +9,71 @@ import CameraCard from '@/components/camera-card';
 import FilterBar from '@/components/filter-bar';
 import RentalModal from '@/components/rental-modal';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useAuth } from '@/lib/AuthContext';
+import { useToast } from '@/hooks/use-toast';
+import { queryClient } from '@/lib/queryClient';
+import { Link } from 'wouter';
 
 export default function Home() {
+  const { isAdmin } = useAuth();
+  const { toast } = useToast();
   const [selectedCamera, setSelectedCamera] = useState<Camera | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [cameraToEdit, setCameraToEdit] = useState<Camera | null>(null);
   const [filters, setFilters] = useState({
     category: 'all',
     availability: 'all',
     search: '',
   });
   
-  const { data: cameras = [], isLoading } = useQuery({
+  const { data: cameras = [], isLoading } = useQuery<Camera[]>({
     queryKey: ['/api/cameras'],
   });
   
+  // Mutation for deleting a camera
+  const deleteMutation = useMutation({
+    mutationFn: deleteCamera,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/cameras'] });
+      toast({
+        title: "Camera Deleted",
+        description: "The camera has been removed from inventory.",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to delete camera",
+        variant: "destructive",
+      });
+    }
+  });
+  
+  // Handle camera rental
   const handleRentClick = (camera: Camera) => {
     setSelectedCamera(camera);
     setIsModalOpen(true);
   };
   
+  // Handle modal close
   const handleCloseModal = () => {
     setIsModalOpen(false);
+  };
+  
+  // Handle editing a camera
+  const handleEditClick = (camera: Camera) => {
+    // For now, redirect to admin panel
+    window.location.href = "/admin";
+  };
+  
+  // Handle deleting a camera
+  const handleDeleteClick = (camera: Camera) => {
+    if (window.confirm(`Are you sure you want to delete ${camera.name}?`)) {
+      deleteMutation.mutate(camera.id);
+    }
   };
   
   const handleFilterChange = (newFilters: { category: string; availability: string; search: string }) => {
@@ -37,7 +81,7 @@ export default function Home() {
   };
   
   // Apply filters to cameras
-  const filteredCameras = cameras.filter(camera => {
+  const filteredCameras = (cameras as Camera[]).filter((camera: Camera) => {
     // Category filter
     if (filters.category !== 'all' && camera.category !== filters.category) {
       return false;
@@ -90,7 +134,20 @@ export default function Home() {
               <p className="mt-2 text-gray-600">Browse our selection of high-quality cameras for rent</p>
             </div>
             
-            <FilterBar onFilterChange={handleFilterChange} />
+            <div className="flex items-center justify-between mb-6">
+              <FilterBar onFilterChange={handleFilterChange} />
+              
+              {isAdmin && (
+                <Link href="/admin">
+                  <Button 
+                    className="bg-blue-600 hover:bg-blue-700 flex items-center gap-2"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Add Camera</span>
+                  </Button>
+                </Link>
+              )}
+            </div>
             
             {isLoading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -98,11 +155,13 @@ export default function Home() {
               </div>
             ) : filteredCameras.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredCameras.map(camera => (
+                {filteredCameras.map((camera: Camera) => (
                   <CameraCard 
                     key={camera.id} 
                     camera={camera} 
-                    onRentClick={handleRentClick} 
+                    onRentClick={handleRentClick}
+                    onEditClick={isAdmin ? handleEditClick : undefined}
+                    onDeleteClick={isAdmin ? handleDeleteClick : undefined} 
                   />
                 ))}
               </div>

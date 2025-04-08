@@ -1,16 +1,22 @@
 import { Camera } from '@shared/schema';
-import { Cpu, Battery, Gauge, Camera as CameraIcon, Calendar, Video, Wind } from 'lucide-react';
+import { Cpu, Battery, Gauge, Camera as CameraIcon, Calendar, Video, Wind, Edit, Trash, PlusCircle } from 'lucide-react';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
+import { useState } from 'react';
+import { useAuth } from '@/lib/AuthContext';
 
 interface CameraCardProps {
   camera: Camera;
   onRentClick: (camera: Camera) => void;
+  onEditClick?: (camera: Camera) => void;
+  onDeleteClick?: (camera: Camera) => void;
 }
 
-export default function CameraCard({ camera, onRentClick }: CameraCardProps) {
+export default function CameraCard({ camera, onRentClick, onEditClick, onDeleteClick }: CameraCardProps) {
   const isAvailable = camera.availableUnits > 0;
+  const { isAdmin } = useAuth();
+  const [showAdminControls, setShowAdminControls] = useState(false);
   
   // Map specification icons based on the text
   const getSpecIcon = (spec: string) => {
@@ -36,6 +42,36 @@ export default function CameraCard({ camera, onRentClick }: CameraCardProps) {
           alt={camera.name} 
           className={`w-full h-56 object-cover ${!isAvailable ? 'filter grayscale' : ''}`}
         />
+        
+        {isAdmin && (
+          <div className="absolute top-3 left-3 flex space-x-2">
+            <Button 
+              size="icon" 
+              variant="default" 
+              className="bg-blue-600 hover:bg-blue-700 rounded-full w-8 h-8 flex items-center justify-center shadow-lg"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (onEditClick) onEditClick(camera);
+              }}
+              title="Edit Camera"
+            >
+              <Edit className="h-4 w-4 text-white" />
+            </Button>
+            <Button 
+              size="icon" 
+              variant="destructive" 
+              className="rounded-full w-8 h-8 flex items-center justify-center shadow-lg"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (onDeleteClick) onDeleteClick(camera);
+              }}
+              title="Delete Camera"
+            >
+              <Trash className="h-4 w-4 text-white" />
+            </Button>
+          </div>
+        )}
+        
         <div className="absolute top-3 right-3">
           {isAvailable ? (
             <Badge className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 font-medium">
