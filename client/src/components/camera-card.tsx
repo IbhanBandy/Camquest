@@ -120,7 +120,7 @@ export default function CameraCard({ camera, onRentClick, onEditClick, onDeleteC
             onClick={() => onRentClick(camera)}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2"
           >
-            Rent Now
+            Request Rental
           </Button>
         ) : (
           <Button disabled className="w-full bg-gray-300 text-gray-500 cursor-not-allowed">
