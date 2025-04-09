@@ -81,7 +81,7 @@ export async function sendCustomerConfirmationEmail(rental: RentalRequest, camer
           </p>
           
           <p style="color: #0f172a; margin-bottom: 25px; line-height: 1.6;">
-            Thank you for submitting your rental request with CamQuest. We have received your request and our team will review it shortly. You will receive another notification once your request has been approved.
+            Thank you for submitting your rental request with CamQuest. We have received your request and our team will review it shortly. Please be on the lookout for follow-up communications from ${ADMIN_EMAIL}.
           </p>
           
           <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
@@ -155,7 +155,7 @@ export async function sendCustomerConfirmationEmail(rental: RentalRequest, camer
       
       Dear ${rental.customerName},
       
-      Thank you for submitting your rental request with CamQuest. We have received your request and our team will review it shortly. You will receive another notification once your request has been approved.
+      Thank you for submitting your rental request with CamQuest. We have received your request and our team will review it shortly. Please be on the lookout for follow-up communications from ${ADMIN_EMAIL}.
       
       RENTAL SUMMARY
       Camera: ${camera.name} (${camera.category})
