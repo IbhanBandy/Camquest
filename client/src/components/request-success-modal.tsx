@@ -42,8 +42,7 @@ export default function RequestSuccessModal({ isOpen, onClose, customerEmail }: 
               </p>
               <div className="bg-blue-100 p-3 rounded border border-blue-200">
                 <p className="text-blue-800 font-medium text-sm">
-                  You will receive follow-up communications from <strong>kaleb.gill420@gmail.com</strong>. 
-                  Please ensure this email address is added to your contacts to prevent messages from being filtered as spam.
+                  Please be on the lookout for follow-up communications from <strong>kaleb.gill420@gmail.com</strong>.
                 </p>
               </div>
             </div>
