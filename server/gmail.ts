@@ -81,7 +81,7 @@ export async function sendCustomerConfirmationEmail(rental: RentalRequest, camer
           </p>
           
           <p style="color: #0f172a; margin-bottom: 25px; line-height: 1.6;">
-            Thank you for submitting your rental request with CamQuest. We have received your request and our team will review it shortly. Please be on the lookout for follow-up communications from ${ADMIN_EMAIL}.
+            Thank you for submitting your rental request with CamQuest. We have received your request and our team will review it shortly. Please be on the lookout for follow-up communications from kaleb.gill420@gmail.com.
           </p>
           
           <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
@@ -122,7 +122,7 @@ export async function sendCustomerConfirmationEmail(rental: RentalRequest, camer
           </div>
           
           <p style="color: #0f172a; margin-bottom: 25px; line-height: 1.6;">
-            If you have any questions or need to make changes to your rental request, please contact us at <a href="mailto:${ADMIN_EMAIL}" style="color: #3b82f6; text-decoration: none;">${ADMIN_EMAIL}</a>.
+            If you have any questions or need to make changes to your rental request, please contact us at <a href="mailto:kaleb.gill420@gmail.com" style="color: #3b82f6; text-decoration: none;">kaleb.gill420@gmail.com</a>.
           </p>
           
           <p style="color: #0f172a; margin-bottom: 5px;">
@@ -155,7 +155,7 @@ export async function sendCustomerConfirmationEmail(rental: RentalRequest, camer
       
       Dear ${rental.customerName},
       
-      Thank you for submitting your rental request with CamQuest. We have received your request and our team will review it shortly. Please be on the lookout for follow-up communications from ${ADMIN_EMAIL}.
+      Thank you for submitting your rental request with CamQuest. We have received your request and our team will review it shortly. Please be on the lookout for follow-up communications from kaleb.gill420@gmail.com.
       
       RENTAL SUMMARY
       Camera: ${camera.name} (${camera.category})
@@ -165,7 +165,7 @@ export async function sendCustomerConfirmationEmail(rental: RentalRequest, camer
       Daily Rate: ${formatCurrency(camera.pricePerDay)}
       Total Price: ${formatCurrency(rental.totalPrice)}
       
-      If you have any questions or need to make changes to your rental request, please contact us at ${ADMIN_EMAIL}.
+      If you have any questions or need to make changes to your rental request, please contact us at kaleb.gill420@gmail.com.
       
       Thank you for choosing CamQuest for your camera rental needs.
       
