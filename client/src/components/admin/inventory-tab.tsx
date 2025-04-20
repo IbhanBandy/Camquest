@@ -14,7 +14,7 @@ export default function InventoryTab() {
   const [editingPrices, setEditingPrices] = useState<Record<number, number>>({});
   const [updatedInventory, setUpdatedInventory] = useState<Record<number, { totalUnits: number }>>({});
   
-  const { data: cameras = [], isLoading } = useQuery({
+  const { data: cameras = [], isLoading } = useQuery<Camera[]>({
     queryKey: ['/api/cameras'],
     refetchOnWindowFocus: true,
   });

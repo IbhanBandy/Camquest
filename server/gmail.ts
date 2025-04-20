@@ -5,30 +5,30 @@ import { format } from 'date-fns';
 // Admin email address to send notifications to
 const ADMIN_EMAIL = 'kaleb.gill420@gmail.com';
 
-// Check if Gmail app password is set
-if (!process.env.GMAIL_APP_PASSWORD) {
-  console.error('WARNING: GMAIL_APP_PASSWORD environment variable is not set. Email functionality will not work.');
+// Read Gmail app password from env
+const gmailPassword = process.env.GMAIL_APP_PASSWORD;
+if (!gmailPassword) {
+  console.warn('WARNING: GMAIL_APP_PASSWORD environment variable is not set. Email functionality will not work.');
 }
-
-// Create a nodemailer transporter using Gmail
-const transporter = nodemailer.createTransport({
+// Create a nodemailer transporter using Gmail if password is provided
+let transporter = nodemailer.createTransport({
   service: 'gmail',
-  auth: {
-    user: ADMIN_EMAIL,
-    pass: process.env.GMAIL_APP_PASSWORD
-  },
+  auth: gmailPassword
+    ? { user: ADMIN_EMAIL, pass: gmailPassword }
+    : undefined,
   debug: true, // Enable debug logs
   logger: true  // Log to console
 });
-
-// Verify connection configuration
-transporter.verify((error, success) => {
-  if (error) {
-    console.error('SMTP connection error:', error);
-  } else {
-    console.log('Email server connection established successfully');
-  }
-});
+// Verify connection configuration only if auth credentials are provided
+if (gmailPassword) {
+  transporter.verify((error, success) => {
+    if (error) {
+      console.error('SMTP connection error:', error);
+    } else {
+      console.log('Email server connection established successfully');
+    }
+  });
+}
 
 // Format currency amount as USD
 const formatCurrency = (amount: number): string => {
