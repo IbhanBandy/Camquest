@@ -1,6 +1,8 @@
 import express, { type Request, Response, NextFunction } from "express";
+import path from "path";
+import { fileURLToPath } from "url";
 import { registerRoutes } from "./routes";
-import { setupVite, serveStatic, log } from "./vite";
+import { setupVite, log } from "./vite";
 
 const app = express();
 app.use(express.json());
@@ -36,6 +38,10 @@ app.use((req, res, next) => {
   next();
 });
 
+// Convert ES module URL to __dirname for production static serving
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 (async () => {
   const server = await registerRoutes(app);
 
@@ -51,9 +57,17 @@ app.use((req, res, next) => {
   // setting up all the other routes so the catch-all route
   // doesn't interfere with the other routes
   if (app.get("env") === "development") {
+    // In development mode, use Vite middleware
     await setupVite(app, server);
   } else {
-    serveStatic(app);
+    // In production mode, serve static assets from dist/public
+    const publicDir = path.join(__dirname, "public");
+    console.log(`🔹 Serving static files from: ${publicDir}`);
+    app.use(express.static(publicDir));
+    // SPA fallback: serve index.html for unmatched routes
+    app.get("*", (_req, res) => {
+      res.sendFile(path.join(publicDir, "index.html"));
+    });
   }
 
   // Determine the port to listen on (default: 5000 or use PORT env var)
